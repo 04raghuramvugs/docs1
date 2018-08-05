@@ -1,0 +1,1087 @@
+javascript -> {user-name:} //user-name is not a valid key so put in quotes("user-name")
+              {"user-name":} 
+              (or)
+              {username:}              
+
+              setTimeout, setInterval -> Asynchronous operations(non blocking)
+
+              Promise, Observable- for asychronous operations
+
+http://subinsb.com/jquery-to-javascript/#find
+
+--var n = $("article#first p.summary");
+var n = document.querySelectorAll("article#first p.summary");
+
+--var n = document.getElementById("first");
+var p = n.getElementsByTagName("p");
+
+--var c = document.querySelectorAll("#comments .comment");  //1,362 ms
+var c = document.querySelectorAll(".comment"); //1,168 ms
+
+--var n = document.getElementById("comments");
+var c = n.getElementsByClassName("comment"); //107 ms
+
+--var c = document.getElementsByClassName("comment"); //75ms
+
+--$("#container").append("<p>more content</p>");
+document.getElementById("container").innerHTML += "<p>more content</p>";
+   (or)
+--var p = document.createElement("p");
+p.appendChild(document.createTextNode("more content");
+document.getElementById("container").appendChild(p);    //Rarely faster than innerHTML
+
+
+
+--------------------------------------------------------------------------------------------------------
+--Typescript
+Typescript compiler transpiles typescript to javascript so that browsers can understand
+npm install -g typescript
+tsc --version
+tsc main.ts //transpiling typescript to javascript
+node main.js //executing
+
+function method1() {
+    for(var i=1; i<=5;i++) {
+
+    }
+    console.log(i);//5
+}
+
+function method1(){
+    for(let i=1; i<=5;i++) {
+
+    }
+    console.log(i);//compilation error but prints 5
+}
+
+let a; //by default a is any type
+
+let message;
+message='abc';
+(<string>message).endsWith("c");
+(or)
+(message as string).endsWith("c");
+
+drawPoint({p:1,q:3});
+drawPoint(point:{p:number,q:number})=>{}
+or
+drawPoint(point PI)=>{}   //interface PI {
+                               p:number,
+                               q:number 
+                            }
+
+----------------------------------------------------------------------------
+
+--In the component we can import service and can access (service class variables, methods) using service reference variable
+
+-We can access other component (class variables, methods) by creating object
+
+--Component <-> View
+  Service to View & view to service not possible
+
+-- Components can change service class variable and last component which changed the service class variable is final
+   ***If view has to be same then call service method from all the components
+   
+    @Injectable()
+    export class AppService {
+
+        constructor() { }
+
+        svalue:number = 1000; 
+        
+        smethod():any{
+            return this.svalue = 53453;
+        }
+        
+        smethod1():any {
+            return this.svalue = 788683;
+        }
+    }
+ 
+ --Component class variables are different for different component class objects
+   ***Eg. If one object changed component class variable value then that component class variable value
+          is not same for other objects
+
+--Angular2 value and event bindings can't be added dynamically. They only work if they are added to a components template statically.
+  Eg.setAttribute("(click)","method1()"); //wrong 
+-----------------------------------------------------------------------------
+@Component({
+    selector:'courses',
+    template:`
+            <img src="{{imageurl}}">
+            <h2>{{title}}</h2>
+            <img [src] ="imageurl">
+            <h2 [textcontent]="title"></h2>
+
+            <table>
+                <tr><td [attr.colspan]="col"></td></tr>
+            </table>
+    `
+})
+
+export class c1 {
+    imageurl="1.jpg";
+    title="Hello";
+    col=6;
+}
+
+Property binding -> component to dom/view 
+
+tree of objects created in memory -> dom
+
+npm install bootstrap --save
+
+^3.6.7 (major.minor.patch) - can change only 3.7|3.8...
+
+styles.css ->global styles
+
+In styles.css-> @import "~bootstrap/dist/css/styles.css";
+
+--<button class="btn" [class.active]="isActive">Click</button>
+  export class c1{
+      isActive:boolean=true;
+  }
+
+--dom style object properties
+  <button [style.backgroundColor]="blue">click</button>
+
+-- <div (click) ="method()">
+        <button (click)="method1($event)">click</button>
+   </div>
+   method1($event){
+       $event.stopPropagation();
+   }
+
+-- <input type="text" (keyup.enter)="method1()">
+    method1(){
+        console.log("enter pressed");
+    }
+
+-- <input type="text" value="text entered" (keyup.enter)="method1($event)">
+    method1($event){
+        console.log($event.target.value); //text entered
+    }
+
+--template variables
+  <input type ="text" value="r@gmail.com" #email (keyup.enter)="method1(email.value)">
+  method1(email) {
+      console.log(email); //r@gmail.com
+  }
+
+--2 way binding 
+  <input [(ngModel)]="email" (keyup.enter)="method1()">
+   email ="r@gmail.com";
+   method1() {
+      console.log(this.email);   
+   }
+   
+   app.module.ts
+   import {FormsModule} from '@angular/forms';
+
+--Built in pipes uppercase, lowercase,decimal currency, percent, number
+   number pipe -> 1,23,300
+   {{value|number:'1.3-3'}} //Eg. 9.123 (after decimal point min 3, max 3)
+   {{price|currency:'AUD'}} //Eg. AUD324
+   {{price|currency:'AUD':true}} //Eg. A$324
+   {{value|date:'shortDate'}} //Eg. 03/03/2018
+
+--Custom pipes
+
+  summarypipe.ts
+ 
+  @Component({
+          template:`
+            {{data|summary:10}}
+          `
+ })  
+  export class classsummary {
+      data ="asdf";
+    
+  }
+ 
+  custompipe.ts
+  import {Pipe, PipeTransform} from '@angular/core';
+  
+  @Pipe({
+      name:"summary"
+  })
+
+  export class c1 implements PipeTransform {           
+      transform(value:String, limit?:number) {
+          
+      }
+  }
+  //Declare c1 in app.module.ts (declarations)
+
+  --input (parent to child)
+
+    Input and Output are two decorators in Angular responsible for communication between two components.
+    @Output is not just a single thing that can pass data back from child to parent. We have to use EventEmitter to emit the event to the parent so that parent can capture the exposed event and retrieve data.
+
+
+    import { Component } from '@angular/core';
+    
+    interface IValue {
+        name:string;
+    }
+    
+    @Component({
+    selector: 'my-app',
+    template: `
+        <child-comp [parentCount]="count" (change)="chmethod()"></child-comp>
+       //<child-comp [parentCount]="count" (change)="chmethod($event)"></child-comp> 
+    `
+    })
+
+    export class App {
+    count: number = 10;
+
+        chmethod(){
+          console.log("changed");        
+        }
+        //chmethod(value){
+            console.log("changed"+value);        
+          }
+        //chmethod(value){
+            console.log("changed" +value.name);        
+          }
+        //chmethod(value:IValue){
+            console.log("changed" +value);        
+          }  
+    } 
+
+    import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+    @Component({
+    selector: 'child-comp',
+    template: `
+        <div>
+        {{ parentCount }}
+        </div>
+    `
+    })
+
+    export class ChildComponent {
+    @Input() parentCount: number;
+    @Output() change = new EventEmitter();
+      method1(){
+          this.change.emit(); 
+          //this.change.emit(true);
+          //this.change.emit({"name":"raghu"});
+
+      }
+    
+    }
+
+--Alias
+  <child-comp [parentCount]="count" (change)="chmethod($event)"></child-comp> 
+
+  @Input(parentCount) cn : number;
+  @Output(change) click = new EventEmitter();
+
+  method1(){
+      console.log(this.cn);
+      this.click.emit();
+  }
+
+-- In @Component({
+
+    })//Use template or templateUrl but not both
+
+    templates bundled in main.bundle.js no separate files present after transpilation
+
+--styles
+  @Component({
+      styles:[
+          `
+          `
+      ],
+      styleUrls['./1.css']  //Here which comes last will be affected (style/styleUrls)
+  })
+    
+  In html file we can apply styles 
+   <style></style>  
+
+   priority-> <style></style> > styles|styleUrls(which ever comes last)
+
+    
+--Shadow dom (Applies only to that scope)
+  Eg. var v = document.querySelector(".value1");
+      var root = v.createShadowRoot();
+      root.innerHTML=`
+                      <style>
+                      h1{}
+                      </style>
+                      <h1></h1>
+                    ';
+   @Component({
+       encapsulation:ViewEncapsulation.Emulated
+   })   
+   
+--Structural directives
+ <div *ngIf="courses.length>0;then course1 else course2"></div>
+ <ng-template #course1>
+
+ </ng-template>
+
+ <div *ngFor="i in obj">
+    <div *ngIf="i.stage1== 'y'; then selecta else selectb"></div>
+    <ng-template #selecta>
+        <select class="selectClass">
+        </select>
+    </ng-template>    
+ </div>
+
+ --<div [hidden]="courses.length >0"><div>  //element exists in dom if true, whereas in *ngIf element is removed from the dom 
+
+--
+  <a (click)="viewMode='map1'">click</a>
+  <div [ngSwitch]="viewMode">
+    <div *ngSwitchCase="'map1'"></div>
+    <div *ngSwitchDefault></div>
+  </div>
+
+--*ngFor
+  <div *ngFor="let i of obj; index as j"> // angular.io - first,last,even odd
+    {{j}} - {{i.name}}
+  </div>
+
+--Change detection
+  this.courses.push({"name":"xyz"});
+
+
+  var index = this.courses.indexOf(course);
+  this.courses.splice(index,1);
+
+
+--ngFor trackby for performance improvements(for large data)
+  without trackby it reconstructs dom tree
+
+  <div *ngFor="let i of obj; trackBy:trackCourse">
+    {{i.id}} - {{i.name}}
+  </div>
+
+  trackCourse(index, course) {
+      return course? course.id: undefined;
+  }
+
+
+--ngClass (Attribute directive)
+   
+ <div [class.active]="istrue"></div>
+ <div [class.inactive]="!istrue"></div>
+
+ instead of above code use this
+
+ <div [ngClass]='{"active":istrue,"inactive":!istrue}'></div>
+
+--ngStyle 
+ <div [style.backgroundColor]="istrue? 'blue':'green'"></div>
+ <div [style.color]="istrue? 'red':'green'"></div>
+ 
+ instead of above
+
+ <div [ngStyle]="{'backgroundColor':'istrue'?'blue':'green',
+                   'color':'istrue'?'red':'green'
+                 }"
+
+--Safe traversal operator
+ 
+   task={
+       "assignee":{
+           "name":xyz
+       }
+   } 
+   
+   <div>{{task.assignee.name}}</div>
+   Sometimes name will not be there so we get error when we access task.assignee.name
+
+   So use
+   <div *ngIf="task.assignee">{{task.assignee.name}}</div>
+  
+   or use safe traversal operator
+
+   <div> {{task.assignee?.name}}</div>
+  
+--Custom directives
+ <input type="text" appInputFormat [format]="'lowercase'">
+
+ import {Input, Directive, HostListener, ElementRef} from '@angular/core';
+
+ @Directive({
+     selector:'appInputFormat'
+ })
+
+ export class d1{
+     @Input() format:string;
+
+     constructor(private el: ElementRef) {         
+     }
+     @HostListener("blur") onBlur() {
+         if(this.format=="lowercase") {
+            let value:string = this.el.nativeElement.value;
+            this.el.nativeElement.value = value.toUpperCase();
+         }
+     }
+ }
+
+ 
+--Forms
+Reactive forms
+More control over validation logic
+Good for complex forms
+Unit testable
+
+Template-driven forms
+Good for simple forms
+Simple validation
+Easier to create
+Less code
+
+Template-driven forms
+<style type="text/css">
+  .ng-invalid.ng-touched {
+      border:red solid 1px;
+  }
+</style>
+
+
+<form #f="ngForm" (ngSubmit)="loginSubmit(f)">
+  <div ngModelGroup="contactGroup" #contactGroup="ngModelgroup">  
+    <div *ngIf="!contactGroup.valid"></div>
+    <input required minlength="4" maxlength="5" pattern="banana" type="text" ngModel name="firstname" #fname="ngModel" (change)="log(fname)">
+    <div class="alert alert-danger" *ngIf="fname.touched && !fname.valid"> 
+        <div *ngIf="fname.errors.required">Required</div>
+        <div *ngIf="fname.errors.minlength">minlength error {{fname.errors.minlength.requiredLength}}</div> //In console NgModel->errors->minlength->requiredLength
+        <div *ngIf="fname.errors.pattern">pattern error</div>
+    </div> //valid,invalid, touched, untouched, dirty, pristine
+  </div>
+  <input type="checkbox" name="subscribe" ngModel>
+  
+  <select multiple name="contactname" ngModel>
+    <option value=""></option>
+    <option *ngFor="let i of contacts" [value]="i.id"> {{i.name}}</option>
+    //<option *ngFor="let i of contacts" [ngValue]="i"> {{i.name}}</option> // In {{f.value|json}} contactname object is created
+  </select>
+
+  <div *ngFor="let i of contacts">
+        <input type="radio" name="r1" [value]="i.id" ngModel>{{i.name}} 
+  </div> 
+  {{f.value|json}}
+
+  <button [disabled]="!f.valid">Submit</button>
+</form> 
+
+ 
+ log(x) {
+     console.log(x); // NgModel {name:firstname,.....}
+ }
+
+ loginSubmit(f) {
+     console.log(f);// NgForm{..} Eg. f.valid, f.value->json object   
+ }
+
+ contactMethods(){
+     contacts = [
+         {
+             "name":"zxcv","id":1213"
+         }
+     ];
+ }
+
+
+--Reactive Forms
+More control over form structure, form behavior
+Unit tests
+
+AbstractControl->base class for FormGroup, FormControl
+
+In app.module.ts
+import {ReactiveFormsModule } from '@angular/forms';
+
+import {FormGroup, FormControl, Validators} from '@angular/forms';
+
+form = new FormGroup({
+    account: new FormGroup({
+        username: new FormControl('',[Validators.required, Validators.minLength(3), UsernameValidators.cannotcontainSpace,UsernameValidators.shouldBeUnique]),
+        password: new FormControl('',[Validators.required, Validators.minLength(3)])
+    });    
+});
+
+get username(){
+    return this.form.get('account.username');
+}
+
+<form [formGroup]="form">
+  <div [formGroupName]="account">
+        <input type ="text" formControlName="username">
+        <div *ngIf="username.touched && username.invalid">
+            <div *ngIf="username.pending">checking for uniqueness</div> //asynchronous validators loader message
+            <div *ngIf="username.errors.minlength">Minimum {{username.errors.minlength.requiredLength}} charaters required</div>
+            <div *ngIf="username.errors.required">required</div>
+            <div *ngIf="username.errors.cannotcontainSpace">No space</div>
+            <div *ngIf="username.errors.shouldBeUnique">not unique</div>
+        </div>
+        <input type ="password" formControlName="password">
+  </div>
+</form>
+
+v.ts
+import {AbstractControl, ValidatonErrors} from '@angular/forms';
+
+export class UsernameValidators {
+    static cannotcontainSpace(control:AbstractControl):ValidationErrors | null {
+        if((control.value as string).indexOf('') >=0 ) {
+            return {cannotcontainSpace:true};
+        }
+        else {
+            return null;
+        }
+    }
+
+    //Asynchronous validators
+
+    static shouldBeUnique(control:AbstractControl):Promise<ValidationErrors|null> {
+        return new Promise((resolve,reject)=>{
+          setTimeout(()=>{
+            if(control.value === "asdf"){
+                resolve({shouldBeUnique:true});
+            } else {
+                resolve(null);
+            }
+          },2000);
+        });
+    }
+}
+
+In complex forms
+put validation file in app->common->validators
+
+--form builder
+ 
+ form;
+ constructor(fb:FormBuilder){  
+    this.form = fb.group({
+        name:['',Validators.required],
+        account:fb.group({
+            contact:[]
+        })
+    });
+ }
+
+--Http services
+ get-get
+ post-create
+ put-update
+ delete-delete
+ patch-updates few values
+
+ json code->jsonplaceholder.typicode.com
+
+ In app.module.ts
+ import{HttpModule} from '@angular/http';
+
+ <input type="text" #text1 (keyup.enter)="method1(text1)">
+
+ In app.component.ts
+
+ constructor(private s:c1) {
+
+ }
+ 
+ this.s.method().subscribe(response=>{console.log(response)});
+ this.s.method1().subscribe(response=>console.log(response);
+        post.id = response.id; //declare type post as any
+        or
+        post['id']= response.id;
+        this.posts.splice(0,0,post);
+ this.s.method2(post).subscribe(response=>console.log(response);
+ this.s.method3(post).subscribe(response=>console.log(response); 
+--
+ 
+ In app.service.ts
+ import {Http} from '@angular/http';
+ import 'rxjs/add/operator/map';
+ 
+ @Injectable()
+ export class c1 {
+     url;
+     constructor(private http:Http){}
+    
+     method(){
+        this.http.get(this.url).map(response=>response.json());
+     }
+
+     method1(i:HTMLInputElement){
+        let post:any = {title:i.value};
+        this.http.post(this.url, JSON.stringify(post)).map(response=>response.json());
+     }
+
+     method2(post){
+         this.http.patch(this.url+"/'+post.id, JSON.stringify({name:"qwert"})).map(response=>response.json());
+         this.http.put(this.url, JSON.stringify(post)).map(response=>response.json());
+     }
+
+     method3(post){
+         this.http.delete(this.url+"/'+post.id).map(response=>response.json());
+     }
+ }
+
+ --ngOnInit - called when Initalizes component
+
+--Component->Service->backend
+
+--Expected Errors
+ 404-not found
+ 400- bad request
+
+ --Unexpected errors
+ Server offline
+ Network down
+ Unhandled exceptions
+
+Handling unexpected errors
+
+this.s.method().subscribe(response=>{console.log(response.json())},error=>{console.log(error)});
+
+Handling unexpected errors
+this.s.method().subscribe(response=>{console.log(response.json())},
+    (error:Response)=>
+        {
+            if(error.status==404)
+            {
+                console.log("not found")
+            }
+    );
+
+--Observables, Promises
+
+Observables are lazy, allow reactive programming, provides useful operators, prefer this
+ 
+Promises are eager
+
+
+--Routing
+
+In app.module.ts
+import {RouterModule, Routes} from '@angular/router';
+
+const routes:Routes=[
+    {
+        path:'', component:HomeComponent         //default page
+    },
+    {
+        path:'profile/:id/:username', component:GithubProfileComponent
+    },
+    {
+        path:'profile', component:ProfileComponent
+    },
+    {
+        path: '**', component: NotfoundComponent     //** Wild card which catches any url on the address bar
+    } 
+]  //here order of routes is very important if we keep wild card path at the top only NotfoundComponent page will be displayed
+
+
+ imports:[RouterModule.forRoot(routes)]
+ exports:[RouterModule]
+  
+ <a href="/profile">Profile</a> //If we use href, page is reloaded so use routerLink
+ 
+ <a routerLink="/profile" [queryParams]='{"name":"raghu"}'>profile</a>
+ //When we click on profile link then we get raghu in the url
+
+
+ <a [routerLink]="['/profile', 145, "raghu"]">Profile username</a>
+ 
+  http://localhost:4200/profile/145/raghu  //If we enter in the browser then GithubProfileComponent page is displayed
+
+  Getting 145 value in GithubProfileComponent ts file
+
+  import {ActivatedRoute} from '@angular/router';
+
+  constructor(private route:ActivatedRoute) {}
+
+  ngOnInit() {
+      this.route.paramMap.subscribe(params=>{console.log(+params.get("id"))}); //+ ->converts string to number 
+      (or)
+      let value1 = this.route.snapshot.paramMap.get("id"); //value is 145
+     
+      this.route.queryParamMap.subscribe(params=>console.log(params.get("name"));//raghu
+     
+  } 
+
+  --Combining multiple Observables
+
+  import {Observable} from 'rxjs/Observable';
+  import 'rxjs/add/observable/combineLatest';
+  import 'rxjs/add/operator/switchMap;
+
+  ngOnInit(){
+      Observable.combineLatest([
+          this.route.paramMap,
+          this.route.queryParamMap
+      ]).switchMap(combine=>{
+         let id = combine[0].get("id");
+         let name = combine[1].get("name");
+      }).subscribe(followers=>this.f = followers)
+  }
+ 
+ --Programmatic Navigation
+
+  import {Router} from '@angular/router';
+
+  constructor(route:Router){} 
+
+  submit(){
+      this.route.navigate(['/followers',1,2,4]); //passing parameters
+      this.route.navigate(['/followers'], { queryParams:
+            {
+                name: "raghu"
+            }
+      }); //passing query parameters
+  }
+
+
+--Authentication and Authorization
+ Protecting routes with CanActivate interface
+
+ /*interface CanActivate {
+     canActivate(route:ActivatedRouteSnapshot,state: RouterStateSnapshot): Observable<boolean>|Promise<boolean>|boolean
+ }*/
+
+ auth-guards.service.ts
+ import {CanActivate, Router} from '@angular/router';
+
+ @Injectable()
+
+ export class AuthGuard implements CanActivate {
+    constructor(private route: Router, private authService: AuthService) {}
+     canActivate(){
+         if(this.authService.isLoggedIn())
+             return true
+             this.route.navigate(['/login']);
+             return false;
+         }
+     }
+ }
+In app.module.ts
+
+RouterModule.forRoot([
+    {
+        path:"admin", component: AdminComponent, canActivate:[AuthGuard]
+    },
+    {   
+        path: 'uploads', loadChildren: './uploads/shared/upload.module#UploadModule', canActivate: [AuthGuard] 
+    }
+])
+-----
+upload.module.ts
+
+export class UploadModule { }
+const routes: Routes = [
+  { path: '', component: UploadsListComponent },
+];
+
+@NgModule({
+  imports: [    
+    RouterModule.forChild(routes),
+  ]
+})
+
+
+In providers declare AuthGuard
+
+-------
+
+Animations
+import {trigger, state, style, animate, transition,keyframes} from '@angular/animations';
+
+@Component({
+    /*animations: [
+        trigger('page1', [
+        
+        state('void',style({})),
+        
+        transition('void => *', [
+            animate("3000ms ease-in-out", style({transform:"translateX(100%)"}))
+        ]),
+        transition('* => void', [
+            animate("3000ms ease-in-out", style({transform:"translateX(-100%)"}))
+        ])
+        ])
+    ]*/
+    
+    animations:[
+      trigger("page1", [
+          state("void", style({})),
+          transition("void<=>*", animate("5s", keyframes([
+            style({ backgroundColor: "red", offset: 0 }),
+            style({ backgroundColor: "blue", offset: 0.2 }),
+            style({ backgroundColor: "orange", offset: 0.3 }),
+            style({ backgroundColor: "black", offset: 1 })
+          ])))
+      ])
+    ]
+})
+
+
+<input type="button" value="click" (click)="animation1()">
+<h3 >
+    <div @page1 *ngIf="page11==true" style="text-align:center">
+        Hello.....
+    </div>
+</h3>
+
+ page11:boolean=true;
+ animation1(){
+    this.page11 = !(this.page11);
+ }
+
+-----
+1.html
+<div [@expandCollapse]="isExpanded ? 'expanded' : 'collapsed'"></div>
+
+1.component.ts
+@Component({  
+  animations: [ expandCollapse ]
+})
+import { trigger, transition, state, animate, style, keyframes, useAnimation, query, animateChild, group, stagger } from '@angular/animations';
+
+a.ts
+export const expandCollapse = trigger('expandCollapse', [
+  state('collapsed', style({
+    height: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    opacity: 0
+  })),
+
+  transition('collapsed => expanded', [
+    animate('300ms ease-out', style({
+      height: '*',
+      paddingTop: '*',
+      paddingBottom: '*'
+    })),
+    animate('1s', style({ opacity: 1 }))
+  ]),
+
+  transition('expanded => collapsed', [
+    animate('300ms ease-in')
+  ])
+]);
+
+-----------------------------------------------------------------------------------------------
+Angular Material
+
+https://material.angular.io
+ 
+-------------------------------------------------------------------------------------------------
+Redux
+When to use redux?
+Independent copies of same data in multiple places.
+Multiple views that need to work with same data and be in sync
+Data can be updated by multiple Users
+Data can be updated by multiple actors 
+
+Building blocks
+Store, action, reducer
+Store- Single javascript object that contains state of application
+Actions-Plain javascript objects that represent something has happened
+Reducer-A function that specifies how the state changes in response to an action
+
+A reducer does not modify the state it returns new state
+function increement(input) {
+    return {count:input.count+1};
+}
+
+function reducer(state, action){
+    switch(action.type){
+        case 'increement': return {count: state.count++};
+    }
+}
+
+package.json
+@angular/common:"^2.3.1" --version should be equal or greater than this to use redux
+
+npm install @angular-redux/store
+
+
+----
+
+store.ts
+
+import {tassign} from 'tassign';
+
+export interface IAppState{
+    counter:number;
+}
+
+export function rootReducer(state:IAppState, action):IAppState{
+    switch(action.type){
+        case increment: return {counter: state.counter+1}; //Not modifying original state but new state returning
+    }
+ ** return state;
+}
+---
+app.module.ts
+
+import {NgRedux,NgReduxModule} from 'ng2-redux';
+import {IAppState, rootReducer} from './store';
+
+constructor(ngRedux: NgRedux<IAppState>){
+    ngRedux.configureStore(rootReducer,{counter:0}); //Initialize store
+}
+---
+app.component.ts
+
+import {NgRedux, select} from 'ng2-redux';
+import {IAppState} from './store';
+
+@select() counter; //Using select counter gets the incremented value after increment method
+constructor(private ngRedux:NgRedux<IAppState>){    
+}
+
+increment(){
+    this.ngRedux.dispatch({type:increment});
+}    
+--
+app.html
+
+<button (click)="increment()">click</button>
+{{counter| async}}
+
+
+--------------------------------------------------------
+
+Integration test- Component + template
+Unit test - component
+End-to-end test - test application as a whole
+
+----------------------------------------------------------
+
+Form Controls
+
+--
+<select (change)="selectMethod($event)">
+    <option *ngFor="let i of selectObj" [value]="i.id"> {{i.name}}</option>    
+</select>
+
+selectObj = [{"name":"rewrwyz","id":3},{"name":"xyz","id":1},{"name":"qwert","id":2}];
+
+selectMethod(value){
+     console.log(value.target.value); //3
+}
+
+
+--
+<div *ngFor="let i of selectObj">
+    <label>{{i.name}}</label>&nbsp;&nbsp;<input type="radio" name="value1" [value]="i.id" (click)="radioButtonMethod($event)">
+    <br><br>
+</div>
+
+radioButtonMethod(value) {
+    console.log("radio button value:"+value.target.value); //3
+}
+
+--
+<input type="text" [value]="tboxValue"  #v1 (keyup.enter)="textboxValue(v1)">
+
+tboxValue:string="Hello";
+textboxValue(v) {
+    console.log("text box value:"+v.value);
+}
+
+Similarly for textarea
+--
+<input type="checkbox" [checked]="check" (click)="checkedMethod()"
+
+check:boolean =true;
+
+checkedMethod() {
+    this.check=!this.check;
+    console.log(this.check);
+}
+
+
+------------
+jQWidgets
+
+https://www.jqwidgets.com/angular-components-documentation/documentation/angular-cli/angular-cli.htm
+
+npm install jqwidgets-scripts --save
+
+angular.json file 
+   inside the styles property add this line:
+
+  "./node_modules/jqwidgets-scripts/jqwidgets/styles/jqx.base.css"
+
+tsconfig.json file and add this at the bottom:
+"include": [
+  "src/**/*"
+],
+"files": [
+  "./node_modules/jqwidgets-scripts/jqwidgets-ts/angular_jqxbargauge.ts"
+]
+
+app.module.ts
+import { jqxBarGaugeComponent } from 'jqwidgets-scripts/jqwidgets-ts/angular_jqxbargauge';
+
+app.component.ts
+export class AppComponent {
+    values: number[] = [102, 115, 130, 137];
+}
+
+app.component.html
+<jqxBarGauge 
+    [width]="600" [height]="600" [max]="150" 
+    [colorScheme]="'scheme02'" [values]="values">
+</jqxBarGauge>
+
+**Need extra features assign attribute in jqxBarGauge Eg: [min]="100"
+
+--Project
+export class HomeComponent implements OnInit {
+    constructor() { }
+    optiontag;yestext;
+    tag1;
+    ngOnInit() {
+        var hc = new HomeComponent();
+        hc.optiontagMethod();    
+    }
+    optiontagMethod(){  
+        this.optiontag = document.createElement("option");          
+        this.yestext = document.createTextNode("yes"); 
+        this.optiontag.appendChild(this.yestext);
+        this.optiontag.setAttribute("value","yes");
+        this.selecttag.appendChild(this.optiontag); 
+        
+        this.tag1 = document.querySelector("#mainTable tbody");
+
+        for(var i=1; i<3; i++) {
+            divTag1[i] = document.createElement("div");
+            divTag1[i].appendChild(this.selecttag);    
+            
+            this.tag1.innerHTML += `<tr><td>${divTag1[i].innerHTML}</td></tr>`;
+        }
+    }
+
+    var tableData = document.getElementsByClassName("mainDetailsTable"); //table name mainDetailsTable       
+    var tableArrayData = Array.from(tableData); //HTMLCollection to array
+
+    var cn3 = Array.from(cn2[tdCount].childNodes);                            
+    var cn4:HTMLOptionElement = <HTMLOptionElement>cn3[0].childNodes[0]; 
+    //type casting Node to HTMLOptionElement
+   
+} 
+
+---var selectField = cn3[tdCount].firstChild; //Here selectField, firstChild type is Node and cn3 type is Node[]
+   var selectClassName = selectField.classList[1]; //here we get error classList doesnot exist on type Node so
+
+   To solve the issue 
+   In first line ->var selectField:any then selectClassName,classList types becomes any, error goes
+
+--Angular2 value and event bindings can't be added dynamically. They only work if they are added to a components template statically.
+  Eg.setAttribute("(click)","method1()"); //wrong 
+
+-- appendChild takes only node it won't take string, alternative is innerHTML
+   Use document.querySelector for innerHTML
