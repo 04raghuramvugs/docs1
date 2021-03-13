@@ -1083,5 +1083,5 @@ export class HomeComponent implements OnInit {
 --Angular2 value and event bindings can't be added dynamically. They only work if they are added to a components template statically.
   Eg.setAttribute("(click)","method1()"); //wrong 
 
--- appendChild takes only node it won't take string, alternative is innerHTML
+----- appendChild takes only node it won't take string, alternative is innerHTML
    Use document.querySelector for innerHTML
